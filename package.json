@@ -32,13 +32,13 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
-    "@types/node": "^22.10.7",
-    "@typescript-eslint/eslint-plugin": "^8.20.0",
-    "@typescript-eslint/parser": "^8.20.0",
+    "@types/node": "^22.13.6",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
     "eslint": "8.57.1",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.2",
-    "prettier": "^3.4.2",
+    "eslint-plugin-prettier": "^5.2.3",
+    "prettier": "^3.5.2",
     "rimraf": "^6.0.1",
     "typescript": "~5.5.4"
   },
