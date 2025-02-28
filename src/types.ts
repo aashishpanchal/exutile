@@ -1,11 +1,11 @@
 import type {HttpStatus} from './enums';
 import type {Request, Response, NextFunction} from 'express';
 
-// Extracts the value type of an object type
+/** Extracts the value type of an object */
 export type ValueOf<T> = T[keyof T];
 
-// Filters out only number types from a union
-export type NumberOf<K> = K extends number ? K : never;
+/** Filters out only number types from a union */
+export type NumberOf<K> = Extract<K, number>;
 
 // Define a type for HttpStatus that only includes number values
 export type HttpStatusNumber = NumberOf<ValueOf<typeof HttpStatus>>;
