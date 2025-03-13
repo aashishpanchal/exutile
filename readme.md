@@ -15,6 +15,7 @@
 - [Motivation](#motivation-)
 - [Quick Start](#quick-start-)
 - [`globalErrorHandler`: Error Handler Middleware](#globalerrorhandler-error-handler-middleware-)
+- [`serveStatic`: Serve Static Website Middleware (e.g., React, Vue)](#servestatic-serve-static-website-middleware-eg-react-vue)
 - [`async-handler`: Simplifying Controllers](#async-handler-simplifying-controllers-️)
 - [Standardized JSON Responses with ApiRes](#standardized-json-responses-with-apires-)
 - [HttpError](#httperror-)
@@ -28,6 +29,7 @@
 ## Features ✨
 
 - ✅ Simplified error handling with `globalErrorHandler`
+- ✅ Simplified Serve Static Website with `serveStatic`
 - ✅ Automatic async error handling using `async-handler`
 - ✅ Standardized API responses with `ApiRes`
 - ✅ Flexible HTTP status codes and custom error classes
@@ -111,6 +113,33 @@ app.use(
 - **isDev**: Enables detailed error messages in development mode (default: **true**).
 - **write**: Optional callback for logging or handling errors.
 
+## `serveStatic`: Serve Static Website Middleware (e.g., React, Vue)
+
+The `serveStatic` function is a middleware that serves static files from a directory and handles Single Page Application **(SPA)** routing by returning index.html for unmatched routes, excluding specified patterns **(e.g., API routes).**
+
+#### Usage:
+
+```typescript
+import express from 'express';
+import {serveStatic} from 'exutile';
+
+const app = express();
+
+// Serve static files and handle SPA routing
+app.use(serveStatic({path: 'public', exclude: '/api{/*path}'}));
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
+```
+
+#### Options:
+
+- path: The directory to serve static files from `(default: "public")`.
+- exclude: Routes to exclude from SPA routing. This can be a string or an array of strings. `(default: '/api{/\*path}')`.
+
+> _Note: The exclude option can take advantage of the [path-to-regexp](https://www.npmjs.com/package/path-to-regexp) library to define more complex route patterns._
+
 ## `async-handler`: Simplifying Controllers 🛠️
 
 Eliminates repetitive **`try-catch`** blocks by managing error handling for both async and sync functions. It also integrates seamlessly with **ApiRes** for enhanced response handling.
@@ -143,13 +172,7 @@ app.get(
 ### Advanced Example: Handling Cookies and Headers
 
 ```typescript
-import {handler, Handler} from 'exutile';
-
-// Login type handler
-type LoginHandler = Handler<{email: string; password: string}>;
-
-// Login request handler
-const login = handler<LoginHandler>(async (req, res) => {
+const login = handler(async (req, res) => {
   const {email, password} = req.body;
   const user = await loginUser(email, password);
 
