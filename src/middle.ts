@@ -1,6 +1,12 @@
-import type {ErrorOptions} from './types';
-import type {ErrorRequestHandler} from 'express';
+import {join} from 'path';
+import {match} from 'path-to-regexp';
 import {HttpError, InternalServerError} from './errors';
+import type {ErrorOptions, ServeOptions} from './types';
+import express, {
+  Router,
+  type ErrorRequestHandler,
+  type RequestHandler,
+} from 'express';
 
 /**
  * Express middleware to handle `HttpError` and unknown errors.
@@ -45,4 +51,43 @@ export const globalErrorHandler = (
     );
     return res.status(error.status).json(error.toJson());
   };
+};
+
+/**
+ * Middleware to serve static files and handle SPA routing.
+ * Serves static files from a directory and returns `index.html` for unmatched routes,
+ * excluding specified patterns (e.g., API routes).
+ *
+ * @param {object} [options] - Configuration options.
+ * @param {string} [options.path="public"] - Directory to serve static files from.
+ * @param {Array<string>|string} [options.exclude='/api{/*path}'] - Routes to exclude from SPA routing.
+ * @returns {Router} - Express Router configured for static file serving and SPA routing.
+ *
+ * @example
+ * // Serve static files from "public" directory and handle SPA routing
+ * app.use(serveStatic({ path: 'public', exclude: '/api{/*path}' }));
+ */
+export const serveStatic = (options: ServeOptions = {}): Router => {
+  const {exclude = '/api{/*path}', path = join(process.cwd(), 'public')} =
+    options;
+  const excludes = Array.isArray(exclude) ? exclude : [exclude];
+
+  const indexFile = join(path, 'index.html');
+  const excludeMatchers = excludes.map(pattern => match(pattern, {end: false}));
+
+  /** Checks if a path matches any excluded patterns. */
+  const isExcluded = (pathname: string): boolean =>
+    excludeMatchers.some(matcher => matcher(pathname));
+
+  /** Middleware to serve `index.html` for non-excluded routes. */
+  const renderIndex: RequestHandler = (req, res, next) => {
+    const pathname = req.originalUrl.split('?')[0];
+    if (isExcluded(pathname)) return next();
+    res.sendFile(indexFile);
+  };
+
+  return express
+    .Router()
+    .use(express.static(path, {index: false})) // Serve static files
+    .get('*', renderIndex); // Handle SPA routing
 };
