@@ -1,6 +1,6 @@
 {
   "name": "exutile",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "A utility library designed to simplify and enhance Express.js applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -28,29 +28,28 @@
     "express": "^4.21.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.22.0",
     "@types/express": "^5.0.0",
-    "@types/node": "^22.10.7",
-    "@typescript-eslint/eslint-plugin": "^8.20.0",
-    "@typescript-eslint/parser": "^8.20.0",
-    "eslint": "8.57.1",
+    "@types/node": "^22.13.6",
+    "eslint": "^9.22.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.2",
-    "prettier": "^3.4.2",
+    "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.2",
     "rimraf": "^6.0.1",
-    "typescript": "~5.5.4"
+    "typescript": "~5.5.4",
+    "typescript-eslint": "^8.26.1"
   },
   "keywords": [
+    "proxy",
     "express",
     "exutile",
-    "helper",
+    "handler",
     "utility",
-    "proxy",
-    "typedi",
-    "tsyringe",
     "http-status",
     "http-errors",
     "asyncHandler"
   ],
   "homepage": "https://github.com/aashishpanchal/exutile#readme",
-  "packageManager": "pnpm@10.0.0"
+  "packageManager": "bun@1.2.2"
 }

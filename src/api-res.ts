@@ -1,4 +1,4 @@
-import {HttpStatus} from '../enums';
+import {HttpStatus} from './enums';
 
 /**
  * ApiRes class for standardizing API responses

@@ -1,5 +1,5 @@
-import {HttpStatus} from '../enums';
-import type {BodyMessage, HttpErrorBody, HttpStatusNumber} from '../types';
+import {HttpStatus} from './enums';
+import type {BodyMessage, HttpErrorBody, HttpStatusNumber} from './types';
 
 /**
  * Get a human-readable error name from the HTTP status code.
@@ -9,7 +9,7 @@ import type {BodyMessage, HttpErrorBody, HttpStatusNumber} from '../types';
 export const getErrorName = (status: number): string => {
   if (status < 400 || status > 511) return 'HttpError';
   // Find the key corresponding to the given status code
-  const statusKey = HttpStatus.NAMES[`$${status as HttpStatusNumber}`];
+  const statusKey = HttpStatus[`${status as HttpStatusNumber}_NAME`];
   // If the status code is not found, return a generic error name
   if (!statusKey) return 'HttpError';
   const name = statusKey

@@ -1,11 +1,11 @@
 import type {HttpStatus} from './enums';
-import type {Request, Response, NextFunction} from 'express';
+import type {Request, Response, NextFunction, RequestHandler} from 'express';
 
-// Extracts the value type of an object type
+/** Extracts the value type of an object */
 export type ValueOf<T> = T[keyof T];
 
-// Filters out only number types from a union
-export type NumberOf<K> = K extends number ? K : never;
+/** Filters out only number types from a union */
+export type NumberOf<K> = Extract<K, number>;
 
 // Define a type for HttpStatus that only includes number values
 export type HttpStatusNumber = NumberOf<ValueOf<typeof HttpStatus>>;
@@ -28,12 +28,19 @@ export interface HttpResBody {
   result: any; // The result of the request
 }
 
+// Define a reusable type for handler props
+export type Handler<B = unknown, P = unknown, Q = unknown> = {
+  body: B;
+  param: P;
+  query: Q;
+};
+
 // Define the type for request handler functions
-export type ReqHandler<T = any> = (
-  req: Request, // Express request object
-  res: Response, // Express response object
-  next: NextFunction, // Next middleware function
-) => T | Promise<T>; // Can return a value or a promise
+export type ReqHandler<B = any, P = any, Q = any> = (
+  req: Request<P, any, B, Q>,
+  res: Response,
+  next: NextFunction,
+) => any | Promise<any>;
 
 // Define a constructor type for classes
 export type Constructor<T> = new (...args: any[]) => T;
@@ -41,7 +48,7 @@ export type Constructor<T> = new (...args: any[]) => T;
 // Define a type that wraps methods of a class with request handlers
 export type WrappedMethods<T> = {
   [K in keyof T]: T[K] extends (...args: any[]) => any
-    ? ReqHandler<void> // If the method is a function, wrap it with ReqHandler
+    ? RequestHandler // If the method is a function, wrap it with ReqHandler
     : T[K]; // Otherwise, keep the original type
 };
 
@@ -106,4 +113,10 @@ export type ProxyWrapper = {
     clsOrInstance: Constructor<T>,
     ...args: ConstructorParameters<Constructor<T>>
   ): WrappedMethods<T>;
+};
+
+// Define the ErrorOption type
+export type ErrorOptions = {
+  isDev?: boolean;
+  write?: (error: unknown) => void;
 };
