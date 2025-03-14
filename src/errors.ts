@@ -6,10 +6,10 @@ import type {BodyMessage, HttpErrorBody, HttpStatusNumber} from './types';
  * @param {number} status - The HTTP status code.
  * @returns {string} - The formatted error name.
  */
-export const getErrorName = (status: number): string => {
+export const getErrorName = (status: HttpStatusNumber): string => {
   if (status < 400 || status > 511) return 'HttpError';
   // Find the key corresponding to the given status code
-  const statusKey = HttpStatus[`${status as HttpStatusNumber}_NAME`];
+  const statusKey = HttpStatus[`${status}_NAME`];
   // If the status code is not found, return a generic error name
   if (!statusKey) return 'HttpError';
   const name = statusKey
@@ -32,7 +32,7 @@ export class HttpError extends Error {
    */
   constructor(
     readonly msg: BodyMessage,
-    readonly status: number = HttpStatus.INTERNAL_SERVER_ERROR,
+    readonly status: HttpStatusNumber = HttpStatus.INTERNAL_SERVER_ERROR,
     readonly detail?: object,
   ) {
     super();

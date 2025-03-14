@@ -1,4 +1,5 @@
 import {HttpStatus} from './enums';
+import type {HttpStatusNumber} from './types';
 
 /**
  * ApiRes class for standardizing API responses
@@ -12,7 +13,7 @@ export class ApiRes {
    */
   constructor(
     readonly result: any = {},
-    readonly status: number = HttpStatus.OK,
+    readonly status: HttpStatusNumber = HttpStatus.OK,
     readonly message: string = 'Operation successful',
   ) {}
 

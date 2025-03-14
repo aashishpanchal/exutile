@@ -3,4 +3,5 @@ export * from './errors';
 export * from './middle';
 export * from './api-res';
 export * from './handler';
-export type {ValueOf, NumberOf} from './types';
+// Types utility export
+export type {ValueOf, NumberOf, Handler, ReqHandler} from './types';

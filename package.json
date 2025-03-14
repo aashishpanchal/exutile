@@ -1,22 +1,38 @@
 {
   "name": "exutile",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A utility library designed to simplify and enhance Express.js applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.d.ts",
+    "dist",
     "LICENSE"
   ],
   "engines": {
     "node": ">=22.13.1"
   },
   "scripts": {
-    "build": "rimraf dist && tsc -p tsconfig.json",
+    "build": "bun remove-dist && tsc -p ./tsconfig.json",
     "format": "prettier --write \"./src/**/*.{ts,js}\"",
     "lint": "eslint \"./src/**/*.{ts,js}\" --fix",
-    "clean": "rimraf dist"
+    "remove-dist": "rimraf dist"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "require": "./dist/types.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "types": [
+        "./dist/types.d.ts"
+      ]
+    }
   },
   "repository": {
     "type": "git",
